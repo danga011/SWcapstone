@@ -1,0 +1,43 @@
+# Threshold Sweep Configuration
+# Purpose: Find optimal T_low/T_high operating points for gate models
+
+target_experiments:
+  - configs/exp_gate_effnetb0_patchcore_r18.yaml
+  - configs/exp_gate_mnv3_patchcore_r18.yaml
+
+sweep:
+  # Using calibrated sigmoid scores with temperature=50.0
+  # Score distribution is approximately 0.09-0.44 range
+
+  # T_high: samples with gate_score > T_high are classified as anomaly (skip heatmap)
+  T_high: [0.45, 0.40, 0.35, 0.32, 0.30, 0.28, 0.25]
+
+  # T_low: samples with gate_score < T_low are classified as normal (skip heatmap)
+  T_low: [0.10, 0.12, 0.15, 0.18, 0.20, 0.22, 0.25]
+
+  # Calibration settings
+  use_calibrated: true
+  temperature: 50.0
+
+# Splits to evaluate
+splits_to_eval:
+  - test_mix
+  - val_mix
+
+# Operating point selection criteria
+objective:
+  # Primary: maximize recall (anomaly recall)
+  primary: recall
+
+  # Constraint: heatmap_call_rate must be in this range
+  constraint:
+    heatmap_call_rate_min: 0.20
+    heatmap_call_rate_max: 0.60
+
+  # Secondary: minimize average latency
+  secondary: avg_latency_ms
+
+# Output paths
+output:
+  results_csv: outputs/reports/threshold_sweep_results.csv
+  best_csv: outputs/reports/threshold_sweep_best.csv

@@ -1,0 +1,48 @@
+# Experiment: EfficientNet-B0 gate + PatchCore ResNet18 heatmap
+experiment_id: "gate_effnetb0_patchcore_r18"
+description: "EfficientNet-B0 as gate model with PatchCore (ResNet18) for heatmap"
+
+# Dataset configuration
+dataset_root: "./final_dataset"
+metadata_csv: "outputs/metadata.csv"
+seed: 42
+
+# Model configuration
+gate_model:
+  name: "efficientnet_b0"
+  pretrained: true
+  num_classes: 2
+  image_size: 224
+
+heatmap_model:
+  name: "patchcore"
+  backbone: "resnet18"
+  layers: ["layer2", "layer3"]
+  image_size: 224
+  coreset_sampling_ratio: 0.1
+  num_neighbors: 9
+
+# Cascade thresholds
+thresholds:
+  T_low: 0.3   # Below this: classify as normal, skip heatmap
+  T_high: 0.7  # Above this: classify as anomaly, skip heatmap
+  # Between T_low and T_high: uncertain, run heatmap model
+
+# Evaluation configuration
+eval_splits:
+  - "test_mix"
+  - "neu_test"
+
+# Training configuration
+training:
+  gate:
+    epochs: 20
+    batch_size: 32
+    lr: 0.001
+    weight_decay: 0.0001
+  heatmap:
+    batch_size: 32
+    num_workers: 4
+
+# Artifacts
+artifacts_dir: "models/gate_effnetb0_patchcore_r18"

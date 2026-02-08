@@ -1,0 +1,47 @@
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+
+# === Virtual Environment ===
+.venv/
+venv/
+ENV/
+
+# === ML Model Artifacts (대용량 바이너리) ===
+models/
+*.pkl
+*.pt
+*.pth
+*.onnx
+
+# === Dataset (대용량 이미지) ===
+final_dataset/
+
+# === MLflow ===
+runs/
+mlruns/
+mlflow.db
+
+# === 재생성 가능한 출력물 ===
+outputs/metadata.csv
+outputs/metadata_mvtec.csv
+outputs/split_summary.txt
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === IDE ===
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# === Claude Code Agent ===
+.claude/

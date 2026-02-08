@@ -1,0 +1,15 @@
+============================================================
+THRESHOLD SWEEP
+============================================================
+Config: configs/threshold_sweep_fast.yaml
+
+============================================================
+Processing: configs/exp_gate_effnetb0_patchcore_r18.yaml
+============================================================
+Loaded PatchCore model from models/gate_effnetb0_patchcore_r18/heatmap_model.pkl
+  Models loaded successfully
+
+  Evaluating on test_mix (839 samples)
+  Sweeping 3 T_high x 3 T_low = 9 combinations
+  gate_effnetb0_patchcore_r18/test_mix:   0%|          | 0/9 [00:00<?, ?it/s]  gate_effnetb0_patchcore_r18/test_mix:  11%|█         | 1/9 [36:43<4:53:45, 2203.14s/it]/usr/local/Cellar/python@3.11/3.11.14_2/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 21 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

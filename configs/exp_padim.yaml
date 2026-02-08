@@ -1,0 +1,36 @@
+# Experiment: PaDiM baseline (no gate model)
+experiment_id: "padim_baseline"
+description: "PaDiM-only baseline without gate model"
+
+# Dataset configuration
+dataset_root: "./final_dataset"
+metadata_csv: "outputs/metadata.csv"
+seed: 42
+
+# Model configuration
+gate_model: null  # No gate model - run heatmap on all samples
+heatmap_model:
+  name: "patchcore"
+  backbone: "resnet18"
+  layers: ["layer2", "layer3"]
+  image_size: 224
+  coreset_sampling_ratio: 0.01
+  num_neighbors: 9
+
+# Cascade thresholds (ignored when gate_model is null)
+thresholds:
+  T_low: 0.3   # Below this: classify as normal, skip heatmap
+  T_high: 0.7  # Above this: classify as anomaly, skip heatmap
+
+# Evaluation configuration
+eval_splits:
+  - "test_mix"
+  - "neu_test"
+
+# Training configuration
+training:
+  batch_size: 32
+  num_workers: 4
+
+# Artifacts
+artifacts_dir: "models/padim_baseline"

@@ -1,0 +1,32 @@
+# Fast Threshold Sweep Configuration
+# Reduced combinations for quicker results
+
+target_experiments:
+  - configs/exp_gate_effnetb0_patchcore_r18.yaml
+  - configs/exp_gate_mnv3_patchcore_r18.yaml
+
+sweep:
+  # Reduced set of thresholds (3x3 = 9 valid combinations per experiment)
+  T_high: [0.40, 0.32, 0.25]
+  T_low: [0.12, 0.18, 0.25]
+
+  # Calibration settings
+  use_calibrated: true
+  temperature: 50.0
+
+# Only test_mix for speed
+splits_to_eval:
+  - test_mix
+
+# Operating point selection criteria
+objective:
+  primary: recall
+  constraint:
+    heatmap_call_rate_min: 0.20
+    heatmap_call_rate_max: 0.60
+  secondary: avg_latency_ms
+
+# Output paths
+output:
+  results_csv: outputs/reports/threshold_sweep_fast_results.csv
+  best_csv: outputs/reports/threshold_sweep_fast_best.csv

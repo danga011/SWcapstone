@@ -1,0 +1,7 @@
+experiment_id,split,config_path,accuracy,precision,recall,f1,auroc,pr_auc,avg_latency_ms,p95_latency_ms,heatmap_call_rate
+padim_baseline,test_mix,configs/exp_padim.yaml,0.3396901072705602,0.3396901072705602,1.0,0.5071174377224199,0.3138894166825005,0.29176782414561325,387.54287749280235,498.35890531539917,1.0
+padim_baseline,neu_test,configs/exp_padim.yaml,1.0,1.0,1.0,1.0,,1.0,372.92314926783246,455.44080436229706,1.0
+gate_effnetb0_patchcore_r18,test_mix,configs/exp_gate_effnetb0_patchcore_r18.yaml,0.6603098927294399,0.0,0.0,0.0,0.5216986509595287,0.3827154369715029,28.225589281611846,35.900816321372986,0.0
+gate_effnetb0_patchcore_r18,neu_test,configs/exp_gate_effnetb0_patchcore_r18.yaml,0.0,0.0,0.0,0.0,,1.0,50.03430989053514,76.23934745788574,0.0
+gate_mnv3_patchcore_r18,test_mix,configs/exp_gate_mnv3_patchcore_r18.yaml,0.6603098927294399,0.0,0.0,0.0,0.5,0.6698450536352801,3.8923685826334538,4.892751574516296,0.0
+gate_mnv3_patchcore_r18,neu_test,configs/exp_gate_mnv3_patchcore_r18.yaml,0.0,0.0,0.0,0.0,,1.0,3.8665568828582764,6.5322816371917725,0.0

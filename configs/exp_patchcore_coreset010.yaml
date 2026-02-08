@@ -1,0 +1,38 @@
+# Experiment: PatchCore baseline with coreset_sampling_ratio=0.10
+# Rationale: Previous baseline used 0.01 (too sparse, AUROC=0.314).
+#            Increasing to 0.10 should improve normal representation.
+experiment_id: "patchcore_coreset010"
+description: "PatchCore (ResNet18) with 10% coreset, no gate model"
+
+# Dataset configuration
+dataset_root: "./final_dataset"
+metadata_csv: "outputs/metadata.csv"
+seed: 42
+
+# Model configuration
+gate_model: null  # No gate model - run heatmap on all samples
+heatmap_model:
+  name: "patchcore"
+  backbone: "resnet18"
+  layers: ["layer2", "layer3"]
+  image_size: 224
+  coreset_sampling_ratio: 0.10
+  num_neighbors: 9
+
+# Cascade thresholds (ignored when gate_model is null)
+thresholds:
+  T_low: 0.3
+  T_high: 0.7
+
+# Evaluation configuration
+eval_splits:
+  - "test_mix"
+  - "neu_test"
+
+# Training configuration
+training:
+  batch_size: 32
+  num_workers: 4
+
+# Artifacts
+artifacts_dir: "models/patchcore_coreset010"
