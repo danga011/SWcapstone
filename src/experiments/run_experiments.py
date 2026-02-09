@@ -187,14 +187,19 @@ class ExperimentRunner:
                 batch_heatmaps[run_heatmap_mask] = h_maps
 
             # Combine scores: use gate prob for confident predictions, heatmap score for uncertain
+            # Normalize heatmap scores to 0-1 range using batch min-max
+            h_min = batch_heatmap_scores[run_heatmap_mask].min() if run_heatmap_mask.any() else 0.0
+            h_max = batch_heatmap_scores[run_heatmap_mask].max() if run_heatmap_mask.any() else 1.0
+            h_range = h_max - h_min if h_max > h_min else 1.0
+            normalized_heatmap = (batch_heatmap_scores - h_min) / h_range
+
             final_scores = np.where(
                 gate_probs < t_low,
                 gate_probs,  # Confident normal
                 np.where(
                     gate_probs > t_high,
                     gate_probs,  # Confident anomaly
-                    # Normalize heatmap score to probability-like range
-                    0.5 + 0.5 * (batch_heatmap_scores / (batch_heatmap_scores.max() + 1e-8))
+                    normalized_heatmap,  # Full 0-1 range normalization
                 )
             )
 
@@ -307,18 +312,32 @@ class ExperimentRunner:
             metadata_csv = self.config["metadata_csv"]
             image_size = self.config["heatmap_model"].get("image_size", 224)
 
-            train_loader, val_loader, _ = create_dataloaders(
-                metadata_csv=metadata_csv,
-                train_split="train_normal",
-                val_split="val_mix",
-                test_split="test_mix",
-                batch_size=self.config.get("training", {}).get("batch_size", 32),
-                num_workers=self.config.get("training", {}).get("num_workers", 4),
-                image_size=image_size,
-            )
+            # Gate model needs mixed data (normal + anomaly) for binary classification
+            # Use train_mix/val_gate splits if gate_model is configured
+            gate_config = self.config.get("gate_model")
+            if gate_config is not None:
+                gate_train_split = self.config.get("training", {}).get(
+                    "gate", {}
+                ).get("train_split", "train_mix")
+                gate_val_split = self.config.get("training", {}).get(
+                    "gate", {}
+                ).get("val_split", "val_gate")
+
+                gate_train_loader, gate_val_loader, _ = create_dataloaders(
+                    metadata_csv=metadata_csv,
+                    train_split=gate_train_split,
+                    val_split=gate_val_split,
+                    test_split="test_mix",
+                    batch_size=self.config.get("training", {}).get("batch_size", 32),
+                    num_workers=self.config.get("training", {}).get("num_workers", 4),
+                    image_size=image_size,
+                )
+            else:
+                gate_train_loader = None
+                gate_val_loader = None
 
             # Train gate model (if configured)
-            gate_model = self.train_gate_model(train_loader, val_loader)
+            gate_model = self.train_gate_model(gate_train_loader, gate_val_loader)
 
             # Create normal-only loader for heatmap training
             train_normal_dataset = AnomalyDataset(

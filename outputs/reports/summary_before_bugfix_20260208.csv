@@ -1,0 +1,2 @@
+experiment_id,split,config_path,accuracy,precision,recall,f1,auroc,pr_auc,avg_latency_ms,p95_latency_ms,heatmap_call_rate
+patchcore_mvtec_coreset010,test_mix,configs/exp_patchcore_mvtec_coreset010.yaml,0.5343137254901961,0.5343137254901961,1.0,0.6964856230031949,0.48614196040560115,0.5577483393514239,494.55553877587414,527.5787189602852,1.0
