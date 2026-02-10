@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # Training service
+  train:
+    build: .
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./splits:/app/splits
+      - ./artifacts:/app/artifacts
+      - ./reports:/app/reports
+      - ./mlruns:/app/mlruns
+    environment:
+      - GATE_MODEL=effnetb0
+      - HEATMAP_MODEL=patchcore_r18
+      - MLFLOW_TRACKING_URI=file:///app/mlruns
+      - DEVICE=cpu
+    command: >
+      bash -c "
+        python src/train.py --round 1 --heatmap patchcore_r18 --device cpu &&
+        python src/train_gate.py --round 1 --gate effnetb0 --device cpu
+      "
+
+  # Serving service
+  serve:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/app/models
+      - ./configs:/app/configs
+    environment:
+      - GATE_MODEL=effnetb0
+      - HEATMAP_MODEL=patchcore_r18
+      - T_LOW=0.3
+      - T_HIGH=0.7
+      - DEVICE=cpu
+    command: ["uvicorn", "src.serve:app", "--host", "0.0.0.0", "--port", "8000"]
+
+  # Dashboard service
+  dashboard:
+    build: .
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./artifacts:/app/artifacts
+      - ./reports:/app/reports
+      - ./mlruns:/app/mlruns
+    environment:
+      - MLFLOW_TRACKING_URI=file:///app/mlruns
+    command: ["python", "src/dashboard.py", "--format", "html", "--output", "/app/reports/dashboard.html"]
+
+  # MLflow UI
+  mlflow:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/app/mlruns
+    command: ["mlflow", "ui", "--host", "0.0.0.0", "--port", "5000", "--backend-store-uri", "file:///app/mlruns"]

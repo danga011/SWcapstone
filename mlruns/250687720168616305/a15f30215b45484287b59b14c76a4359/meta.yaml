@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/danghyeonsong/HYUE/4-1/final/mlruns/250687720168616305/a15f30215b45484287b59b14c76a4359/artifacts
+end_time: 1770632966945
+entry_point_name: ''
+experiment_id: '250687720168616305'
+lifecycle_stage: active
+run_id: a15f30215b45484287b59b14c76a4359
+run_name: round1_patchcore_r18
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1770632694978
+status: 3
+tags: []
+user_id: danghyeonsong

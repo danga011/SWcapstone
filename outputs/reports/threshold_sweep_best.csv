@@ -1,3 +1,0 @@
-experiment_id,model,split,T_low,T_high,accuracy,precision,recall,f1,auroc,pr_auc,avg_latency_ms,p95_latency_ms,heatmap_call_rate,call_rate_dist,call_rate_distance
-gate_effnetb0_patchcore_r18,efficientnet_b0,test_mix,0.03,0.5,0.6603098927294399,0.0,0.0,0.0,0.543565140287542,0.3702470490088108,25.614251965419328,36.492690443992615,0.0,0.2,0.4
-gate_mnv3_patchcore_r18,mobilenetv3_small_100,test_mix,0.03,0.5,0.6603098927294399,0.0,0.0,0.0,0.5,0.6698450536352801,4.035936635214041,6.296537816524506,0.0,0.2,0.4
